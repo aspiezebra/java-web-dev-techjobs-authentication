@@ -28,7 +28,6 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test:2.5.6') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	implementation 'org.springframework.security:spring-security-crypto'
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	compile 'mysql:mysql-connector-java'
 }
