@@ -2,8 +2,8 @@ package org.launchcode.javawebdevtechjobsauthentication.controllers;
 
 import org.launchcode.javawebdevtechjobsauthentication.models.User;
 import org.launchcode.javawebdevtechjobsauthentication.models.data.UserRepository;
-import org.launchcode.javawebdevtechjobsauthentication.models.dto.LoginDTO;
-import org.launchcode.javawebdevtechjobsauthentication.models.dto.RegisterDTO;
+import org.launchcode.javawebdevtechjobsauthentication.models.dto.LoginFormDTO;
+import org.launchcode.javawebdevtechjobsauthentication.models.dto.RegisterFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -11,7 +11,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,14 +43,14 @@ public class AuthenticationController {
     }
 
     @GetMapping("/register")
-    public String displayRegistrationForm(Model model) {
-        model.addAttribute(new RegisterDTO());
+    public static String displayRegistrationForm(Model model) {
+        model.addAttribute(new RegisterFormDTO());
         model.addAttribute("title", "Register");
         return "register";
     }
 
     @PostMapping("/register")
-    public String processRegistrationForm(@ModelAttribute @Valid RegisterDTO registerDTO,
+    public String processRegistrationForm(@ModelAttribute @Valid RegisterFormDTO registerDTO,
                                           Errors errors, HttpServletRequest request,
                                           Model model) {
 
@@ -85,13 +84,13 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String displayLoginForm(Model model) {
-        model.addAttribute(new LoginDTO());
+        model.addAttribute(new LoginFormDTO());
         model.addAttribute("title", "Log In");
         return "login";
     }
 
     @PostMapping("/login")
-    public String processLoginForm(@ModelAttribute @Valid LoginDTO LoginDTO,
+    public String processLoginForm(@ModelAttribute @Valid LoginFormDTO LoginFormDTO,
                                    Errors errors, HttpServletRequest request,
                                    Model model) {
 
@@ -100,7 +99,7 @@ public class AuthenticationController {
             return "login";
         }
 
-        User theUser = userRepository.findByUsername(LoginDTO.getUsername());
+        User theUser = userRepository.findByUsername(LoginFormDTO.getUsername());
 
         if (theUser == null) {
             errors.rejectValue("username", "user.invalid", "The given username does not exist");
@@ -108,7 +107,7 @@ public class AuthenticationController {
             return "login";
         }
 
-        String password = LoginDTO.getPassword();
+        String password = LoginFormDTO.getPassword();
 
         if (!theUser.isMatchingPassword(password)) {
             errors.rejectValue("password", "password.invalid", "Invalid password");
